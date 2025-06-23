@@ -1,0 +1,6 @@
+{
+    "editor.inlayHints.enabled": "off",
+    "FSharp.codeLenses.references.enabled": false,
+    "FSharp.codeLenses.signature.enabled": false,
+    "FSharp.inlayHints.typeAnnotations": false
+}
