@@ -46,27 +46,60 @@ module a6 =
         | EmptyN
         | InnerN of BinaryTree<'a> * 'a * BinaryTree<'a>
 
-    /// TODO: Complete and document
+    /// <summary> finds the lowest value in a binary search tree </summary>
+    /// <params> a binary search tree </params>
+    /// <returns> the lowest value in the binary search tree </returns>
     let rec bstMin tr =
-        None
+        match tr with
+        | EmptyN -> None
+        | InnerN (lt, x, rt) -> if lt = EmptyN then Some x else bstMin lt
 
-    /// TODO: Complete and document
+
+    /// <summary> finds the biggest value in a binary search tree </summary>
+    /// <params> a binary search tree </params>
+    /// <returns> the biggest value in the binary search tree </returns>
     let rec bstMax tr =
-        None
+        match tr with
+        | EmptyN -> None
+        | InnerN (lt, x, rt) -> if rt = EmptyN then Some x else bstMax rt
 
     /// <summary>
     /// Checks if a value x is between the minimum and maximum values.
     /// The minimum and maximum can be None, which means no limit on that side.
     /// </summary>
     let between x (theMin, theMax) =
-        false
+        match theMin, theMax with
+        | None, None -> true
+        | Some y, None -> if x > y then true else false
+        | None, Some y -> if x < y then true else false
+        | Some y, Some z -> if x > y && x < z then true else false
+
 
     /// <summary> Checks if a binary tree is a valid Binary Search Tree (BST).</summary>
     /// <param name="tr">The binary tree to check</param>
     let isBST tr =
-        /// TODO: Complete and document
+        /// <summary> determines whether a binary search tree is a valid one or not </summary>
+        /// <params> a binary search tree and a minimum and maximum value </params>
+        /// <returns> a boolean indicating whether the binary search tree is valid or not </returns>
         let rec helper tr theMin theMax =
-            false
+            match tr with
+            | EmptyN -> true
+            | InnerN (lt, x, rt) ->
+                match lt, rt with
+                | EmptyN, EmptyN -> true
+                | InnerN (lt0, y, rt0), EmptyN -> 
+                    if between x (Some y, None)
+                    then helper lt theMin theMax 
+                    else false
+                | EmptyN, InnerN (lt0, y, rt0) -> 
+                    if between x (None, Some y)
+                    then helper rt theMin theMax 
+                    else false  
+                | InnerN (lt0, y, rt0), InnerN (lt1, z, rt1) -> 
+                    if between x (Some y, Some z) then
+                        helper lt theMin theMax
+                        helper rt theMin theMax
+                    else false
 
         // Leave this part alone
         helper tr None None
